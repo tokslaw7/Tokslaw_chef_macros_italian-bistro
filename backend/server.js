@@ -47,4 +47,17 @@ const menu = [
 app.get("/menu", (req, res) => {
     res.json(menu);
 });
- 
+
+app.get("/menu/:menuItem", function(req, res){
+
+    // Access the parameter value using req.params
+    const menuItem = parseInt(req.params.menuItem);
+
+    const eachItem = menu.find(menu => menu.id === menuItem);
+
+    if (eachItem) {
+        res.json(eachItem);
+    }else {
+        res.sendStatus(404).json({error: "Menu not found"});
+    }
+});
