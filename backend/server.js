@@ -45,8 +45,22 @@ const menu = [
 
 
 app.get("/menu", (req, res) => {
-    res.json(menu);
+    const {price} = req.query;
+    if (!price){
+       res.json(menu); 
+    }
+
+//Convert parameters to number because params is String by Default
+const priceInt = parseInt(price);    
+
+const filteredPrices = menu.filter(menu => menu.price === priceInt);
+
+if (filteredPrices.length === 0){
+    return res.status(404).json({error: "There is no food at that price"});
+}
+    res.json(filteredPrices);
 });
+
 
 app.get("/menu/:menuItem", function(req, res){
 
@@ -60,4 +74,9 @@ app.get("/menu/:menuItem", function(req, res){
     }else {
         res.sendStatus(404).json({error: "Menu not found"});
     }
+});
+
+//A Not Implemented response
+app.post("/reservations", (req,res) => {
+    res.status(501).json({error: "Route exists but isn't implemented yet"});
 });
