@@ -6,6 +6,7 @@ const port = 4560;
 
 app.use (express.json());
 
+
 //Create a new endpoint on the root route
 app.get("/", function (request, response) {
 
@@ -109,6 +110,13 @@ const secret_recipe = [
 
 app.get("/chef/secret-recipe", isChef, (req,res) => {
         res.json(secret_recipe);
+});
+
+
+app.use((req,res,next) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] ${req.method} ${req.url}`);
+    next();
 });
 
 
