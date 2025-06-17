@@ -1,8 +1,10 @@
 // Import express
 const express = require("express");
-
 //Instantiate a new instance of express
 const app = express(); 
+const port = 4560;
+
+app.use (express.json());
 
 //Create a new endpoint on the root route
 app.get("/", function (request, response) {
@@ -11,15 +13,8 @@ app.get("/", function (request, response) {
 response.send("Welcome to Chef Marco's Italian Bistro!").end();
 });
 
-//Tell the express app that you want it to listen on port 8080 of your computer
-app.listen(4560, function () {
-
-    //This function gets executed when the app starts listening
-    console.log("Server is listening on 4560");
-});
 
 //Basic Menu
-
 const menu = [
  {
    id: 1,
@@ -76,7 +71,22 @@ app.get("/menu/:menuItem", function(req, res){
     }
 });
 
-//A Not Implemented response
+//A Not Implemented response 
+//Implemented 
 app.post("/reservations", (req,res) => {
-    res.status(501).json({error: "Route exists but isn't implemented yet"});
+    // res.status(501).json({error: "Route exists but isn't implemented yet"});
+    const {name, date, time} = req.body;
+    //console.log(req.body);
+    if (!name || !date || !time){
+        res.status(400).json({error: "Missing name, date,time"})
+    }else{
+        res.status(201).json({Congratulations:`${name}, thank you for reserving at Chef Marco's Restuarant on ${date} at ${time}! Your reservation is confirmed`});
+    }
+});
+
+
+//Tell the express app that you want it to listen on port 8080 of your computer
+app.listen(port, function () {
+    //This function gets executed when the app starts listening
+    console.log(`Server is running at http://localhost:${port}`);
 });
