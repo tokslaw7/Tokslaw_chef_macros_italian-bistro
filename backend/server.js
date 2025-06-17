@@ -72,7 +72,7 @@ app.get("/menu/:menuItem", function(req, res){
 });
 
 //A Not Implemented response 
-//Implemented 
+//Implemented --Handling reservations
 app.post("/reservations", (req,res) => {
     // res.status(501).json({error: "Route exists but isn't implemented yet"});
     const {name, date, time} = req.body;
@@ -82,6 +82,33 @@ app.post("/reservations", (req,res) => {
     }else{
         res.status(201).json({Congratulations:`${name}, thank you for reserving at Chef Marco's Restuarant on ${date} at ${time}! Your reservation is confirmed`});
     }
+});
+
+
+//Protecting Chef's Recipes(Route Level)
+
+const isChef = (req,res,next) => {
+    if (req.headers.role !== 'chef'){
+        return res.status(401).json({error: "Only Chef has access"});
+    }else{
+        next();
+    }
+};
+
+const secret_recipe = [
+        {
+            "warm Water": 2.5,
+            "instant Yeast": 2.5,
+            "sugar": 1.5,
+            "salt": 1.5,
+            "flour": 3.5,
+            "vanilla essence": 1,
+            "nutmeg": 1
+        },
+]
+
+app.get("/chef/secret-recipe", isChef, (req,res) => {
+        res.json(secret_recipe);
 });
 
 
